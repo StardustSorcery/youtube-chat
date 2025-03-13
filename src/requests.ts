@@ -26,7 +26,7 @@ export async function fetchLivePage(id: { channelId: string } | { liveId: string
     throw TypeError("not found id")
   }
   const res = await axios.get(url)
-  return getOptionsFromLivePage(res.data.toString())
+  return getOptionsFromLivePage(id, res.data.toString())
 }
 
 function generateLiveUrl(id: YoutubeId) {
