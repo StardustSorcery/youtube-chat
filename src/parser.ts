@@ -11,13 +11,19 @@ import {
 } from "./types/yt-response"
 import { ChatItem, ImageItem, MessageItem } from "./types/data"
 
-export function getOptionsFromLivePage(data: string): FetchOptions & { liveId: string } {
+export function getOptionsFromLivePage(id: { channelId: string } | { liveId: string } | { handle: string }, data: string): FetchOptions & { liveId: string } {
   let liveId: string
-  const idResult = data.match(/<link rel="canonical" href="https:\/\/www.youtube.com\/watch\?v=(.+?)">/)
-  if (idResult) {
-    liveId = idResult[1]
-  } else {
-    throw new Error("Live Stream was not found")
+
+  if('liveId' in id) {
+    liveId = id.liveId;
+  }
+  else {
+    const idResult = data.match(/<link rel="canonical" href="https:\/\/www.youtube.com\/watch\?v=(.+?)">/)
+    if (idResult) {
+      liveId = idResult[1]
+    } else {
+      throw new Error("Live Stream was not found")
+    }
   }
 
   const replayResult = data.match(/['"]isReplay['"]:\s*(true)/)
